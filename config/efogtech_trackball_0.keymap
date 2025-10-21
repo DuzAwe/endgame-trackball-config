@@ -1,5 +1,5 @@
 /* Smooth scrolling: set default scroll value BEFORE including pointing.h */
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 140  /* try 140–200 if you want faster */
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 170  /* tweak 140–200 to taste */
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
@@ -12,6 +12,7 @@
 #include <behaviors/p2sm_behaviors.dtsi>
 #include <behaviors/rate_limit.dtsi>
 #include <behaviors/auto_hold.dtsi>
+#include <zephyr/dt-bindings/input/input-event-codes.h>
 
 #define LAYER_DEFAULT 0
 #define LAYER_EXTRAS 1
@@ -20,7 +21,7 @@
 #define LAYER_SNIPE 4
 #define LAYER_USER 5
 
-#define SCROLL_MULTIPLIER 2
+#define SCROLL_MULTIPLIER 1
 #define SCROLL_DIVISOR 3
 
 #define SNIPE_MULTIPLIER 1
@@ -97,39 +98,33 @@
 		    >;
 		};
 	};
-/* Map the twist axis (RZ) to vertical scroll wheel */
-#include <zephyr/dt-bindings/input/input-event-codes.h>
-/ {
-    input_processors {
-        twist_to_scroll_mapper: twist_to_scroll_mapper {
-            compatible = "zmk,input-processor-code-mapper";
-            #input-processor-cells = <0>;
-            /* Twist is usually a relative axis -> map RZ -> WHEEL */
-            type = <INPUT_EV_REL>;
-            map = <INPUT_REL_RZ INPUT_WHEEL>;
-        };
-    };
-};
-	
 
-trackball {
-    scroll {
-        /* Only active on the Scroll layer to keep your original “scroll layer”,
-           but ALSO active on Default to catch TWIST ONLY (not XY). */
-        layers = <LAYER_DEFAULT LAYER_SCROLL>;
+	/* Map the twist axis (RZ) to vertical scroll wheel (only twist, not XY) */
+	input_processors {
+		twist_to_scroll_mapper: twist_to_scroll_mapper {
+			compatible = "zmk,input-processor-code-mapper";
+			#input-processor-cells = <0>;
+			type = <INPUT_EV_REL>;
+			map = <INPUT_REL_RZ INPUT_WHEEL>; /* try RX/RY if your hardware reports a different axis */
+		};
+	};
 
-        /* Do NOT use zip_xy_to_scroll_mapper here; that converts all XY to scroll.
-           Instead, we map only the twist axis to scroll, then (optionally) invert. */
-        input-processors =
-            <&twist_to_scroll_mapper>,                  /* twist → wheel */
-            <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;  /* keep your scroll direction */;
-    };
+	trackball {
+		scroll {
+			/* Enable twist-to-scroll on Default and keep your Scroll layer too */
+			layers = <LAYER_DEFAULT LAYER_SCROLL>;
 
-    snipe {
-        layers = <LAYER_SNIPE>;
-        input-processors = <&zip_xy_scaler SNIPE_MULTIPLIER SNIPE_DIVISOR>;
-    };
-};
+			/* Only map TWIST → wheel; leave XY as pointer movement */
+			input-processors =
+				<&twist_to_scroll_mapper>,
+				<&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;
+		};
+
+		snipe {
+			layers = <LAYER_SNIPE>;
+			input-processors = <&zip_xy_scaler SNIPE_MULTIPLIER SNIPE_DIVISOR>;
+		};
+	};
 
 	macros {
 		rgb_tog: rgb_tog {
@@ -237,7 +232,7 @@ trackball {
 			bindings = <&scrlsens_nowrap>, <&scrlsens_nowrap>;
 		};
 
-		/* Encoder scroll (smooth) */
+		/* Encoder scroll (smooth) — first rotary encoder */
 		rotenc_scroll: rotenc_scroll {
 			compatible = "zmk,behavior-sensor-rotate";
 			#sensor-binding-cells = <0>;
@@ -247,13 +242,10 @@ trackball {
 	};
 };
 
-/* EDIT: your mixer tuning for twist detection */
+/* Twist detection tuned for sensitivity + consistency */
 &zip_2s_mixer {
-    /* report a bit faster, but don’t over-trigger */
-    sync-scroll-report-ms = <6>;
-    /* require a clearer twist so normal nudges move the cursor */
-    twist-thres = <5>;                  /* 4–6 is a good range; try 5 first */
-    /* dampen accidental twist detection while moving */
-    twist-interference-thres = <240>;
-    twist-interference-window = <150>;
+	sync-scroll-report-ms = <6>;       /* faster reporting */
+	twist-thres = <5>;                 /* clear twist without over-triggering */
+	twist-interference-thres = <240>;  /* resist false positives */
+	twist-interference-window = <150>; /* stabilize detection */
 };
