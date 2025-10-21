@@ -23,13 +23,16 @@
 #define SNIPE_MULTIPLIER 1
 #define SNIPE_DIVISOR 4
 
+/* Added: stronger per-tick scroll distance */
+#define ZMK_MOUSE_SCRL_VAL 140
+
 / {
 	keymap {
 		compatible = "zmk,keymap";
 
 		default_layer {
 			display-name = "Default";
-			/* EDIT: encoder now emits real scroll via &msc */
+			/* Encoder now emits real scroll via &msc, with tap-ms tuning */
 			sensor-bindings = <&rotenc_scroll &inc_dec_kp LC(TAB) LC(LS(TAB))>;
 			bindings = <
 				&ltmkp LAYER_SNIPE ENTER  &ltmkp LAYER_SCROLL ESC
@@ -214,11 +217,12 @@
 			bindings = <&scrlsens_nowrap>, <&scrlsens_nowrap>;
 		};
 
-		/* EDIT: new fixed scroll encoder behavior using mouse scroll */
+		/* New: fixed scroll encoder behavior using mouse scroll + tap-ms */
 		rotenc_scroll: rotenc_scroll {
 			compatible = "zmk,behavior-sensor-rotate";
 			#sensor-binding-cells = <0>;
 			bindings = <&msc SCRL_UP>, <&msc SCRL_DOWN>;
+			tap-ms = <20>;
 		};
 	};
 };
