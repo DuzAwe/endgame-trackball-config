@@ -100,9 +100,12 @@
 
 	trackball {
 		scroll {
-			layers = <LAYER_SCROLL>;
-			input-processors = <&zip_xy_scaler SCROLL_MULTIPLIER SCROLL_DIVISOR>, <&zip_axis_clamper>,
-							   <&zip_xy_to_scroll_mapper>, <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;
+			/* EDIT: enable twist-to-scroll on default layer too */
+			layers = <LAYER_DEFAULT LAYER_SCROLL>;
+			input-processors = <&zip_xy_scaler SCROLL_MULTIPLIER SCROLL_DIVISOR>,
+			                   <&zip_axis_clamper>,
+							   <&zip_xy_to_scroll_mapper>,
+							   <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;
 		};
 
 		snipe {
@@ -217,17 +220,17 @@
 			bindings = <&scrlsens_nowrap>, <&scrlsens_nowrap>;
 		};
 
-		/* NEW: fixed scroll encoder behavior using smooth scrolling */
+		/* Encoder scroll (smooth) */
 		rotenc_scroll: rotenc_scroll {
 			compatible = "zmk,behavior-sensor-rotate";
 			#sensor-binding-cells = <0>;
-			/* Smooth scrolling uses MOVE_* for sensible speeds */
 			bindings = <&msc MOVE_UP>, <&msc MOVE_DOWN>;
 			tap-ms = <20>;
 		};
 	};
 };
 
+/* EDIT: your mixer tuning for twist detection */
 &zip_2s_mixer {
 	sync-scroll-report-ms = <8>;
 	twist-thres = <6>;
