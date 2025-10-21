@@ -1,3 +1,6 @@
+/* Smooth scrolling: set default scroll value BEFORE including pointing.h */
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 140  /* try 140–200 if you want faster */
+
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/keys.h>
@@ -23,17 +26,13 @@
 #define SNIPE_MULTIPLIER 1
 #define SNIPE_DIVISOR 4
 
-/* Stronger per-tick scroll distance (optional tweak) */
-#define ZMK_MOUSE_SCRL_VAL 140
-
 / {
 	keymap {
 		compatible = "zmk,keymap";
 
 		default_layer {
 			display-name = "Default";
-			/* First sensor = FIRST ROTARY ENCODER → scroll
-			   Second sensor unchanged (Alt+Tab cycle) */
+			/* FIRST SENSOR = FIRST ROTARY ENCODER ⇒ SCROLL (smooth) */
 			sensor-bindings = <&rotenc_scroll &inc_dec_kp LC(TAB) LC(LS(TAB))>;
 			bindings = <
 				&ltmkp LAYER_SNIPE ENTER  &ltmkp LAYER_SCROLL ESC
@@ -218,11 +217,12 @@
 			bindings = <&scrlsens_nowrap>, <&scrlsens_nowrap>;
 		};
 
-		/* NEW: fixed scroll encoder behavior using mouse scroll */
+		/* NEW: fixed scroll encoder behavior using smooth scrolling */
 		rotenc_scroll: rotenc_scroll {
 			compatible = "zmk,behavior-sensor-rotate";
 			#sensor-binding-cells = <0>;
-			bindings = <&msc SCRL_UP>, <&msc SCRL_DOWN>;
+			/* Smooth scrolling uses MOVE_* for sensible speeds */
+			bindings = <&msc MOVE_UP>, <&msc MOVE_DOWN>;
 			tap-ms = <20>;
 		};
 	};
