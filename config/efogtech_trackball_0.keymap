@@ -12,7 +12,6 @@
 #include <behaviors/p2sm_behaviors.dtsi>
 #include <behaviors/rate_limit.dtsi>
 #include <behaviors/auto_hold.dtsi>
-#include <zephyr/dt-bindings/input/input-event-codes.h>
 
 #define LAYER_DEFAULT 0
 #define LAYER_EXTRAS 1
@@ -99,19 +98,23 @@
 		};
 	};
 
-	/* Map the twist axis (RZ) to vertical scroll wheel (only twist, not XY) */
+	/* Twist → scroll (numeric codes to avoid dtc macro issues)
+	   EV_REL = 2
+	   REL_RZ = 11  (try 3 for RX or 4 for RY if your hardware reports a different axis)
+	   REL_WHEEL = 8
+	*/
 	input_processors {
 		twist_to_scroll_mapper: twist_to_scroll_mapper {
 			compatible = "zmk,input-processor-code-mapper";
 			#input-processor-cells = <0>;
-			type = <INPUT_EV_REL>;
-			map = <INPUT_REL_RZ INPUT_WHEEL>; /* try RX/RY if your hardware reports a different axis */
+			type = <2>;
+			map = <11 8>;
 		};
 	};
 
 	trackball {
 		scroll {
-			/* Enable twist-to-scroll on Default and keep your Scroll layer too */
+			/* Twist-to-scroll on Default; keep Scroll layer as well */
 			layers = <LAYER_DEFAULT LAYER_SCROLL>;
 
 			/* Only map TWIST → wheel; leave XY as pointer movement */
@@ -248,4 +251,11 @@
 	twist-thres = <5>;                 /* clear twist without over-triggering */
 	twist-interference-thres = <240>;  /* resist false positives */
 	twist-interference-window = <150>; /* stabilize detection */
+
+	/* Keep your previous XY/twist thresholds if you preferred them */
+	/* Example older values:
+	   // twist-thres = <6>;
+	   // twist-interference-thres = <300>;
+	   // twist-interference-window = <120>;
+	*/
 };
