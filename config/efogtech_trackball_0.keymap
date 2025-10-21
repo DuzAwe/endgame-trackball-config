@@ -98,29 +98,14 @@
 		};
 	};
 
-	/* Twist → scroll (numeric codes to avoid dtc macro issues)
-	   EV_REL = 2
-	   REL_RZ = 11  (try 3 for RX or 4 for RY if your hardware reports a different axis)
-	   REL_WHEEL = 8
-	*/
-	input_processors {
-		twist_to_scroll_mapper: twist_to_scroll_mapper {
-			compatible = "zmk,input-processor-code-mapper";
-			#input-processor-cells = <0>;
-			type = <2>;
-			map = <11 8>;
-		};
-	};
-
 	trackball {
+		/* Back to original: trackball scroll only when on the Scroll layer */
 		scroll {
-			/* Twist-to-scroll on Default; keep Scroll layer as well */
-			layers = <LAYER_DEFAULT LAYER_SCROLL>;
-
-			/* Only map TWIST → wheel; leave XY as pointer movement */
-			input-processors =
-				<&twist_to_scroll_mapper>,
-				<&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;
+			layers = <LAYER_SCROLL>;
+			input-processors = <&zip_xy_scaler SCROLL_MULTIPLIER SCROLL_DIVISOR>,
+			                   <&zip_axis_clamper>,
+							   <&zip_xy_to_scroll_mapper>,
+							   <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;
 		};
 
 		snipe {
@@ -245,17 +230,5 @@
 	};
 };
 
-/* Twist detection tuned for sensitivity + consistency */
-&zip_2s_mixer {
-	sync-scroll-report-ms = <6>;       /* faster reporting */
-	twist-thres = <5>;                 /* clear twist without over-triggering */
-	twist-interference-thres = <240>;  /* resist false positives */
-	twist-interference-window = <150>; /* stabilize detection */
-
-	/* Keep your previous XY/twist thresholds if you preferred them */
-	/* Example older values:
-	   // twist-thres = <6>;
-	   // twist-interference-thres = <300>;
-	   // twist-interference-window = <120>;
-	*/
-};
+/* If you still have a &zip_2s_mixer block elsewhere, you can keep or remove it.
+   It won’t affect anything now that twist-to-scroll is disabled. */
