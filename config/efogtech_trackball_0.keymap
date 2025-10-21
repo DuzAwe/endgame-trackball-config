@@ -20,7 +20,7 @@
 #define LAYER_SNIPE 4
 #define LAYER_USER 5
 
-#define SCROLL_MULTIPLIER 1
+#define SCROLL_MULTIPLIER 2
 #define SCROLL_DIVISOR 3
 
 #define SNIPE_MULTIPLIER 1
@@ -232,8 +232,8 @@
 
 /* EDIT: your mixer tuning for twist detection */
 &zip_2s_mixer {
-	sync-scroll-report-ms = <8>;
-	twist-thres = <6>;
-	twist-interference-thres = <300>;
-	twist-interference-window = <120>;
+	sync-scroll-report-ms = <6>;
+	twist-thres = <4>;
+	twist-interference-thres = <220>;
+	twist-interference-window = <160>;
 };
