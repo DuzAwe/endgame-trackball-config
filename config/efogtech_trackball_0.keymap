@@ -97,22 +97,39 @@
 		    >;
 		};
 	};
+/* Map the twist axis (RZ) to vertical scroll wheel */
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+/ {
+    input_processors {
+        twist_to_scroll_mapper: twist_to_scroll_mapper {
+            compatible = "zmk,input-processor-code-mapper";
+            #input-processor-cells = <0>;
+            /* Twist is usually a relative axis -> map RZ -> WHEEL */
+            type = <INPUT_EV_REL>;
+            map = <INPUT_REL_RZ INPUT_WHEEL>;
+        };
+    };
+};
+	
 
-	trackball {
-		scroll {
-			/* EDIT: enable twist-to-scroll on default layer too */
-			layers = <LAYER_DEFAULT LAYER_SCROLL>;
-			input-processors = <&zip_xy_scaler SCROLL_MULTIPLIER SCROLL_DIVISOR>,
-			                   <&zip_axis_clamper>,
-							   <&zip_xy_to_scroll_mapper>,
-							   <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;
-		};
+trackball {
+    scroll {
+        /* Only active on the Scroll layer to keep your original “scroll layer”,
+           but ALSO active on Default to catch TWIST ONLY (not XY). */
+        layers = <LAYER_DEFAULT LAYER_SCROLL>;
 
-		snipe {
-			layers = <LAYER_SNIPE>;
-			input-processors = <&zip_xy_scaler SNIPE_MULTIPLIER SNIPE_DIVISOR>;
-		};
-	};
+        /* Do NOT use zip_xy_to_scroll_mapper here; that converts all XY to scroll.
+           Instead, we map only the twist axis to scroll, then (optionally) invert. */
+        input-processors =
+            <&twist_to_scroll_mapper>,                  /* twist → wheel */
+            <&zip_scroll_transform INPUT_TRANSFORM_Y_INVERT>;  /* keep your scroll direction */;
+    };
+
+    snipe {
+        layers = <LAYER_SNIPE>;
+        input-processors = <&zip_xy_scaler SNIPE_MULTIPLIER SNIPE_DIVISOR>;
+    };
+};
 
 	macros {
 		rgb_tog: rgb_tog {
@@ -232,8 +249,11 @@
 
 /* EDIT: your mixer tuning for twist detection */
 &zip_2s_mixer {
-	sync-scroll-report-ms = <6>;
-	twist-thres = <4>;
-	twist-interference-thres = <220>;
-	twist-interference-window = <160>;
+    /* report a bit faster, but don’t over-trigger */
+    sync-scroll-report-ms = <6>;
+    /* require a clearer twist so normal nudges move the cursor */
+    twist-thres = <5>;                  /* 4–6 is a good range; try 5 first */
+    /* dampen accidental twist detection while moving */
+    twist-interference-thres = <240>;
+    twist-interference-window = <150>;
 };
