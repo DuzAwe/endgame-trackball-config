@@ -230,5 +230,10 @@
 	};
 };
 
-/* If you still have a &zip_2s_mixer block elsewhere, you can keep or remove it.
-   It won’t affect anything now that twist-to-scroll is disabled. */
+&zip_2s_mixer {
+    /* minimal, valid values to satisfy the binding */
+    sync-scroll-report-ms = <8>;
+    twist-thres = <6>;
+    twist-interference-thres = <300>;
+    twist-interference-window = <120>;
+};
