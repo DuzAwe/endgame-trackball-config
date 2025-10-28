@@ -35,7 +35,7 @@
 			/* FIRST SENSOR = FIRST ROTARY ENCODER ⇒ SCROLL (smooth) */
 			sensor-bindings = <&rotenc_scroll &inc_dec_kp LC(TAB) LC(LS(TAB))>;
 			bindings = <
-				&ltmkp LAYER_SNIPE ENTER  &ltmkp LAYER_SCROLL MB4
+				&ltmkp LAYER_EXTRAS ENTER  &ltmkp LAYER_SCROLL MB4
 				&mkp MCLK                 &kp DELETE
 				&mkp LCLK                 &mkp RCLK
 				&ltm LAYER_SCROLL ESC     &ltm LAYER_DEVICE MB5
