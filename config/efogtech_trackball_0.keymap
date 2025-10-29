@@ -1,4 +1,4 @@
-/* Smooth scrolling: set default scroll value BEFORE including pointing.h */
+/* Smooth scrolling: set default scroll value BEFORE including poointing.h */
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 170  /* tweak 140–200 to taste */
 
 #include <behaviors.dtsi>
