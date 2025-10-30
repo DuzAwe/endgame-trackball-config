@@ -232,11 +232,3 @@
 	};
 };
 
-&zip_2s_mixer {
-    /* minimal, valid values to satisfy the binding */
-    sync-scroll-report-ms = <8>;
-    twist-thres = <6>;
-    twist-interference-thres = <300>;
-    twist-interference-window = <120>;
-};
-
