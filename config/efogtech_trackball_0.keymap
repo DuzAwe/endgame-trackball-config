@@ -42,10 +42,10 @@
 			sensor-bindings = <&rotenc_scroll &inc_dec_kp LC(TAB) LC(LS(TAB))>;
 			bindings = <
 				// buttons
-				&ltmkp LAYER_SNIPE ENTER  &ltmkp LAYER_SCROLL ESC
+				&ltmkp LAYER_SNIPE ENTER  &ltmkp LAYER_EXTRA ESC
 				&mkp MCLK                 &kp DELETE
 				&mkp LCLK                 &mkp RCLK
-				&ltm LAYER_EXTRAS MB4     &ltm LAYER_DEVICE MB5
+				&ltm LAYER_SCROLL MB4     &ltm LAYER_DEVICE MB5
 
 				// rotary encoders (handled by sensor-bindings)
 				&trans                   &trans
