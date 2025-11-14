@@ -18,7 +18,7 @@
 #define LAYER_USER 5
 
 #define SCROLL_MULTIPLIER 1
-#define SCROLL_DIVISOR 3
+#define SCROLL_DIVISOR 6   // increased from 3 to slow scroll
 
 #define SNIPE_MULTIPLIER 1
 #define SNIPE_DIVISOR 8
@@ -29,7 +29,7 @@
 		compatible = "zmk,behavior-sensor-rotate";
 		#sensor-binding-cells = <0>;
 		bindings = <&msc MOVE_UP>, <&msc MOVE_DOWN>;
-		tap-ms = <30>;
+		tap-ms = <90>;  // increased from 30 to match encoder debounce
 	};
 
 	keymap {
