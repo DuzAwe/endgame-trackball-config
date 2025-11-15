@@ -21,7 +21,7 @@
 #define SCROLL_DIVISOR 4  // CHANGE: increased from 3 (slower scroll)
 
 #define SNIPE_MULTIPLIER 1
-#define SNIPE_DIVISOR 4
+#define SNIPE_DIVISOR 5
 
 / {
 	// Encoder scroll (smooth) — first rotary encoder
