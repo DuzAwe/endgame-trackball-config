@@ -218,13 +218,28 @@
 			#sensor-binding-cells = <2>;
 			bindings = <&scrlsens_nowrap>, <&scrlsens_nowrap>;
 		};
+
+		p2sm_accel_toggle {
+			feedback-gpios = <&gpio0 24 GPIO_ACTIVE_HIGH>;
+			feedback-extra-gpios = <&gpio1 0 GPIO_ACTIVE_HIGH>;
+		};
+
+		p2sm_accel_adj {
+			feedback-gpios = <&gpio0 24 GPIO_ACTIVE_HIGH>;
+			feedback-extra-gpios = <&gpio1 0 GPIO_ACTIVE_HIGH>;
+		};
+
+		p2sm_twist_toggle {
+			feedback-gpios = <&gpio0 24 GPIO_ACTIVE_HIGH>;
+			feedback-extra-gpios = <&gpio1 0 GPIO_ACTIVE_HIGH>;
+		};
 	};
 };
 
 &uart0 {
 	compatible = "nordic,nrf-uarte";
 	status = "okay";
-	current-speed = <115200>;
+	current-speed = <460800>;
 	pinctrl-0 = <&uart0_default>;
 	pinctrl-1 = <&uart0_sleep>;
 	pinctrl-names = "default", "sleep";
@@ -235,13 +250,10 @@
 //	pinctrl-0 = <&i2c0_default>;
 //	pinctrl-1 = <&i2c0_sleep>;
 //	pinctrl-names = "default", "sleep";
+//	clock-frequency = <100000>;
 //};
 
 &adc {
-	status = "okay";
-};
-
-&gpiote {
 	status = "okay";
 };
 
