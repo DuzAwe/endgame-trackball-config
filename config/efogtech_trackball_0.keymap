@@ -15,10 +15,10 @@
 #define LAYER_USER         5
 
 #define TWIST_MULTIPLIER   1
-#define TWIST_DIVISOR      1
+#define TWIST_DIVISOR      20
 
 #define SCROLL_MULTIPLIER  1
-#define SCROLL_DIVISOR     40
+#define SCROLL_DIVISOR     20
 
 #define SNIPE_MULTIPLIER   1
 #define SNIPE_DIVISOR      25
@@ -32,10 +32,10 @@
 			DECLARE_ENCODERS;
 			bindings = <
 				// buttons
-				&ltmkp LAYER_SNIPE ENTER  &ltmkp LAYER_SCROLL ESC
+				&ltmkp LAYER_SNIPE ENTER  &ltmkp  LAYER_EXTRAS ESC
 				&mkp MCLK                 &kp DELETE
 				&mkp LCLK                 &mkp RCLK
-				&ltm LAYER_EXTRAS MB4     &ltm LAYER_DEVICE MB5
+				&ltm LAYER_SCROLL MB4     &ltm LAYER_DEVICE MB5
 
 				// rotary encoders
 				&kp C_VOL_UP              &kp LC(TAB)
