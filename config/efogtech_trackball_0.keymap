@@ -15,13 +15,13 @@
 #define LAYER_USER         5
 
 #define TWIST_MULTIPLIER   1
-#define TWIST_DIVISOR      20
+#define TWIST_DIVISOR      10
 
 #define SCROLL_MULTIPLIER  1
 #define SCROLL_DIVISOR     20
 
 #define SNIPE_MULTIPLIER   1
-#define SNIPE_DIVISOR      25
+#define SNIPE_DIVISOR      30
 
 / {
 	keymap {
