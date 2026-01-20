@@ -18,10 +18,10 @@
 #define TWIST_DIVISOR      1
 
 #define SCROLL_MULTIPLIER  1
-#define SCROLL_DIVISOR     3
+#define SCROLL_DIVISOR     20
 
 #define SNIPE_MULTIPLIER   1
-#define SNIPE_DIVISOR      4
+#define SNIPE_DIVISOR      25
 
 / {
 	keymap {
